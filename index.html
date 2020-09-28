@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <!-- build:css css/lib.css -->
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="node_modules/ui-select/dist/select.css" />
+    <!-- endbuild -->
+
+    <!-- build:css css/app.css-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/settings.css">
+    <!-- endbuild -->
+
+    <!-- build:js js/lib.js -->
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-sanitize/angular-sanitize.js"></script>
+    <script src="node_modules/@uirouter/angularjs/release/angular-ui-router.js"></script>
+    <script src="node_modules/moment/moment.js"></script>
+    <script src="node_modules/underscore/underscore.js"></script>
+    <script src="node_modules/restangular/dist/restangular.js"></script>
+    <script src="node_modules/angular-i18n/angular-locale_nl.js"></script>
+    <script src="node_modules/moment/locale/nl.js"></script>
+    <script src="node_modules/angular-cache/dist/angular-cache.js"></script>
+    <script src="node_modules/angular-translate/dist/angular-translate.js"></script>
+    <script src="node_modules/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+    <script src="node_modules/angular-translate-loader-url/angular-translate-loader-url.js"></script>
+    <script src="node_modules/ui-select/dist/select.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js js/app.js-->
+    <script src="app/app.module.js"></script>
+    <script src="app/auth/auth.module.js"></script>
+    <script src="app/core/core.module.js"></script>
+    <script src="app/data/data.module.js"></script>
+    <script src="app/time/time.module.js"></script>
+    <script src="app/widgets/widgets.module.js"></script>
+    <script src="app/auth/auth-interceptor.js"></script>
+    <script src="app/auth/auth-service.js"></script>
+    <script src="app/auth/auth.route.js"></script>
+    <script src="app/auth/current-user.js"></script>
+    <script src="app/auth/login.js"></script>
+    <script src="app/core/common.js"></script>
+    <script src="app/core/config.js"></script>
+    <script src="app/core/run.js"></script>
+    <script src="app/data/datacontext.js"></script>
+    <script src="app/data/cache-factory.js"></script>
+    <script src="app/time/time.js"></script>
+    <script src="app/time/time.route.js"></script>
+    <script src="app/data/repositories/repository.abstract.js"></script>
+    <script src="app/data/repositories/repository.company.js"></script>
+    <script src="app/data/repositories/repository.customer.js"></script>
+    <script src="app/data/repositories/repository.project.js"></script>
+    <script src="app/data/repositories/repository.projectTask.js"></script>
+    <script src="app/data/repositories/repository.tag.js"></script>
+    <script src="app/data/repositories/repository.task.js"></script>
+    <script src="app/data/repositories/repository.time.js"></script>
+    <script src="app/data/repositories/repository.timer.js"></script>
+    <script src="app/data/repositories/repository.user.js"></script>
+    <script src="app/widgets/click-outside.js"></script>
+    <script src="app/widgets/cs-loader.js"></script>
+    <script src="app/widgets/time-format-show-zero.js"></script>
+    <script src="app/widgets/time-format.js"></script>
+    <script src="app/widgets/tc-timer.js"></script>
+    <script src="options.js"></script>
+    <!-- endbuild -->
+
+    <!-- inject:templates:js -->
+    <!-- endinject -->
+
+</head>
+ <body ng-app="app" ng-strict-di="">
+    <ui-view></ui-view>
+  </body>
+</html>

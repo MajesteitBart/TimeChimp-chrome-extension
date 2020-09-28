@@ -1,0 +1,326 @@
+﻿<div ng-show="vm.saved" class="time-saved">
+  <i class="fa fa-check"></i>
+</div>
+<div ng-show="vm.loading" sc-Loader></div>
+<div ng-class="{'invisible': vm.loading || vm.saved}">
+  <div class="registration-add-row">
+    <div class="time-header">
+      <div class="time-header-logo">
+        <img
+          src="https://www.timechimp.com/wp-content/uploads/2018/09/Favicon.png"
+        />
+      </div>
+      <div class="time-header-menu">
+        <div class="btn-group" click-outside="vm.showMenu = false">
+          <button
+            class="btn dropdown-toggle btn-default"
+            ng-click="vm.showMenu = !vm.showMenu"
+          >
+            <i class="fa fa-bars"></i>
+            {{'LAYOUT.MENU' | translate}}
+          </button>
+          <ul
+            ng-show="vm.showMenu"
+            class="dropdown-menu dropdown-menu-actions display-block"
+          >
+            <li class="dropdown-header pt-sm">
+              <strong>{{ vm.currentUser.companyName }}</strong>
+            </li>
+            <li class="divider"></li>
+            <li class="dropdown-header">{{ vm.currentUser.displayName }}</li>
+            <li class="dropdown-header">
+              <small>{{ vm.currentUser.accountTypeName }}</small>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="https://app.timechimp.com" target="_blank">{{'REGISTRATION.MY_HOURS' | translate}}</a>
+            </li>
+            <li>
+              <a href="/options.html" target="_blank">{{'ACCOUNT.MY_SETTINGS' | translate}}</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="javascript:void(0)" ng-click="vm.logout()">{{'LAYOUT.LOGOUT' | translate}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div ng-if="!vm.timer">
+      <form ng-submit="vm.addTime(timeForm.$valid)" name="timeForm" novalidate>
+        <div
+          class="form-group"
+          ng-class="{'has-error': vm.time.customerId == null && vm.submitted}"
+        >
+          <ui-select
+            ng-model="vm.time.customerId"
+            on-select="vm.selectCustomer($item)"
+            required
+          >
+            <ui-select-match
+              placeholder="{{ 'REGISTRATION.WHICH_CUSTOMER' | translate }}"
+              allow-clear="true"
+            >
+              {{ $select.selected.name }}
+            </ui-select-match>
+            <ui-select-choices
+              repeat="value.id as value in vm.customers | filter: {name: $select.search} | orderBy: ['name']"
+            >
+              <div ng-bind-html="value.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div
+          class="form-group"
+          ng-if="vm.hasApp('projects')"
+          ng-class="{'has-error': vm.currentUser.projectRequired && vm.time.projectId == null && vm.submitted}"
+        >
+          <ui-select
+            ng-model="vm.time.projectId"
+            on-select="vm.selectProject($item)"
+            ng-required="vm.currentUser.projectRequired"
+          >
+            <ui-select-match
+              placeholder="{{ 'REGISTRATION.WHICH_PROJECT' | translate }}"
+              allow-clear="true"
+            >
+              {{ $select.selected.name }}
+            </ui-select-match>
+            <ui-select-choices
+              ui-disable-choice="value.hide"
+              repeat="value.id as value in vm.projects | filter: {name: $select.search} | orderBy: ['name', 'customerName']"
+            >
+              <div ng-bind-html="value.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div
+          class="form-group"
+          ng-show="!vm.time.projectId && !vm.currentUser.projectRequired"
+          ng-class="{'has-error': vm.currentUser.taskRequired && vm.time.projectId == null && vm.submitted}"
+        >
+          <ui-select
+            ng-model="vm.time.taskId"
+            ng-disabled="!vm.time.customerId"
+            on-select="vm.selectTask($item)"
+            ng-required="vm.currentUser.taskRequired && !vm.time.projectId"
+          >
+            <ui-select-match
+              placeholder="{{ 'REGISTRATION.WHICH_TASK' | translate }}"
+              allow-clear="true"
+            >
+              {{ $select.selected.name }}
+            </ui-select-match>
+            <ui-select-choices
+              group-by="vm.taskIsBillable"
+              repeat="value.id as value in vm.tasks | filter: {name: $select.search} | orderBy: ['name']"
+            >
+              <div ng-bind-html="value.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div
+          class="form-group"
+          ng-show="vm.time.projectId || vm.currentUser.projectRequired"
+          ng-class="{'has-error': vm.currentUser.projectRequired && vm.time.projectTaskId == null && vm.submitted}"
+        >
+          <ui-select
+            ng-model="vm.time.projectTaskId"
+            on-select="vm.selectProjectTask($item)"
+            ng-required="vm.currentUser.taskRequired && vm.time.projectId"
+            ng-disabled="!vm.time.projectId && vm.currentUser.projectRequired"
+          >
+            <ui-select-match
+              placeholder="{{ 'REGISTRATION.WHICH_TASK' | translate }}"
+              allow-clear="true"
+            >
+              {{ $select.selected.name }}
+            </ui-select-match>
+            <ui-select-choices
+              group-by="vm.taskIsBillable"
+              repeat="value.id as value in vm.projectTasks | filter: {name: $select.search} | orderBy: ['name']"
+            >
+              <div ng-bind-html="value.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div
+          class="form-group notes-labels"
+          click-outside="vm.showTagDropdown = false"
+        >
+          <textarea
+            rows="2"
+            ng-model="vm.time.notes"
+            class="form-control notes"
+            ng-attr-placeholder="{{ 'REGISTRATION.NOTES' | translate }}"
+          ></textarea>
+          <div class="labels">
+            <div class="inline-block full-width">
+              <button
+                class="btn btn-transparent pull-left"
+                type="button"
+                ng-click="vm.showTagDropdown = !vm.showTagDropdown"
+              >
+                <i class="fa fa-tags mr-xs"></i>
+              </button>
+              <div
+                class="dropdown-menu"
+                ng-class="{'display-block': vm.showTagDropdown}"
+              >
+                <input
+                  ng-model="vm.searchTag"
+                  type="text"
+                  ng-attr-placeholder="{{
+                    'REGISTRATION.FILTER_LABELS' | translate
+                  }}"
+                  class="form-control"
+                  autocomplete="off"
+                />
+                <div class="mt-md">
+                  <span
+                    ng-repeat="tag in vm.tags | filter:vm.searchTag as filteredResult"
+                    ng-click="vm.selectTag(tag)"
+                    class="label pointer label-default mr-xs mb-xs pull-left"
+                    >{{ tag.name }}</span
+                  >
+                  <div
+                    ng-show="!vm.tags || vm.tags.length == 0 || filteredResult.length == 0"
+                    class="text-center mt-lg"
+                  >
+                    <p class="no-labels">{{'REGISTRATION.NO_TAGS_FOUND' | translate}}</p>
+                  </div>
+                </div>
+              </div>
+              <span
+                ng-repeat="tagId in vm.time.tagIds"
+                class="label label-transparant mr-xs mt-xs pull-left"
+              >
+                {{ vm.getTagName(tagId) }}
+                <i class="fa fa-times" ng-click="vm.deleteTag(tagId)"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-5 pr-xs">
+            <div class="row">
+              <div class="col-xs-12 pr-xs">
+                <div class="registration-time-from">
+                  <input
+                    ng-model="vm.time.startTime"
+                    ng-blur="vm.calculateTime()"
+                    type="text"
+                    placeholder="{{ 'REGISTRATION.FROM' | translate }}"
+                    class="form-control"
+                    maxlength="10"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="registration-time-to">
+                  <input
+                    ng-model="vm.time.endTime"
+                    ng-blur="vm.calculateTime()"
+                    type="text"
+                    placeholder="{{ 'REGISTRATION.TO' | translate }}"
+                    class="form-control"
+                    maxlength="10"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="margin-bottom-7"></div>
+            <div class="row">
+              <div class="col-xs-12 pr-xs">
+                <input
+                  time-format
+                  ng-model="vm.time.pause"
+                  ng-change="vm.calculateTime()"
+                  type="text"
+                  placeholder="{{ 'REGISTRATION.PAUSE' | translate }}"
+                  class="form-control"
+                  maxlength="10"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-7 pl-sx">
+            <div class="form-group">
+              <input name="time" type="text" time-format placeholder="00:00" class="form-control input-xxl" maxlength="6" autocomplete="off" ng-model="vm.time.hours"
+              ng-init="vm.time.hours = 0" ng-disabled="vm.time.startTime || vm.time.endTime" />
+            </div>
+          </div>
+        </div>
+        <div class="btn-group full-width" ng-hide="vm.hideButtons">
+          <button
+            ng-click="vm.addTime(timeForm.$valid, true)"
+            type="button"
+            class="btn btn-timechimp registration-add-row-submit half-width border-right-grey"
+            ng-disabled="vm.loading"
+          >
+            {{ "REGISTRATION.START_TIMER" | translate }}
+          </button>
+          <button
+            type="submit"
+            class="btn btn-timechimp registration-add-row-submit half-width border-left-grey"
+            ng-disabled="vm.loading"
+          >
+            {{ "REGISTRATION.SAVE" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+    <div ng-if="vm.timer">
+      <div>
+        <span class="timer-projectname">{{ vm.timer.projectName }}</span> (<span
+          class="timer-customername"
+          >{{ vm.timer.customerName }}</span
+        >)
+      </div>
+      <div class="timer-taskname">
+        <span
+          ng-show="vm.timer.billable"
+          class="label label-transparant mr-xs"
+          >{{ "REGISTRATION.BILLABLE" | translate }}</span
+        >
+        <span
+          ng-repeat="tagId in vm.timer.tagIds"
+          class="label label-transparant mr-xs"
+          >{{ vm.getTagName(tagId) }}</span
+        >
+        <small
+          >{{ vm.timer.startEnd
+          }}<span
+            class="pl-sm"
+            ng-show="vm.timer.taskName && vm.timer.startEnd"
+          ></span
+          >{{ vm.timer.taskName }}
+          <span ng-show="vm.timer.pause"
+            >({{ "REGISTRATION.PAUSE_S" | translate }}:
+            {{ vm.formatToTime(vm.timer.pause) }})</span
+          ></small
+        >
+      </div>
+      <div class="timer-time">
+        <tc-timer 
+          ng-if="vm.timer.timer"     
+          start="{{vm.timer.start}}"
+          break="{{vm.timer.pause}}">
+        </tc-timer>
+      </div>
+      <div ng-hide="vm.hideButtons">
+        <button
+          ng-click="vm.stopTimer()"
+          type="button"
+          class=" btn btn-timechimp registration-add-row-submit full-width"
+        >
+          {{ "REGISTRATION.STOP" | translate }}
+        </button>
+      </div>
+    </div>
+    <div ng-show="vm.errorMessage" class="logger bs-callout bs-callout-error">
+      {{ vm.errorMessage }}
+    </div>
+  </div>
+</div>

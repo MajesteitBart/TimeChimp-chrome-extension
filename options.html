@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+    <title>TimeChimp - Instellingen</title>
+    <link rel="stylesheet" href="css/settings.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="section">
+        <h2> Url permissies</h2>
+        <div style="display: grid">
+            <label><input data-site="trello.com" class="permission-checkbox right" type='checkbox'
+                          name="Trello">Trello</label>
+            <label><input data-site="asana.com" class="permission-checkbox right" type='checkbox'>Asana</label>
+            <label><input data-site="docs.google.com" class="permission-checkbox right" type='checkbox'>Google
+                Docs</label>
+            <label><input data-site="inbox.google.com" class="permission-checkbox right" type='checkbox'>Google Inbox</label>
+            <label><input data-site="keep.google.com" class="permission-checkbox right" type='checkbox'>Google
+                Keep</label>
+            <label><input data-site="zendesk.com" class="permission-checkbox right" type='checkbox'>Zendesk</label>
+            <label><input data-site="mail.google.com" class="permission-checkbox right" type='checkbox'>Gmail</label>
+            <label><input data-site="calendar.google.com" class="permission-checkbox right" type='checkbox'>Google
+                Calender</label>
+            <label><input data-site="atlassian.com" class="permission-checkbox right" type='checkbox'>JIRA</label>
+        </div>
+    </div>
+    <div class="notification">
+        <h2>Notificaties</h2>
+        <form id="options">
+            <input type="checkbox" name="isActivated">
+            Krijg een notificatie om de
+            <select name="frequency">
+                <option value="1440">1 dag</option>
+                <option value="30">30 minuten</option>
+                <option value="60">1 uur</option>
+                <option value="120">2 uur</option>
+                <option value="240">4 uur</option>
+                <option value="580">8 uur</option>
+            </select>
+        </form>
+    </div>
+</div>
+<script src="options.js"></script>
+</body>
+</html>
