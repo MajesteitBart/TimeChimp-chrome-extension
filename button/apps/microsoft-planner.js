@@ -1,8 +1,8 @@
-render('.window-header:not(.timechimp)', {observe: true}, function (elem) {
-    var container = createTag('div', 'button-link trello-tb-wrapper');
-    var titleElem = $('.window-title h2', elem);
-    var projectElem = $('.board-header > a');
-    var descriptionElem = $('.js-move-card');
+render('.ms-Dialog:not(.timechimp)', {observe: true}, function (elem) {
+    var container = createTag('button', 'ms-Button button-link planner-tb-wrapper');
+    var titleElem = $('.isTitleStyle input.value', elem);
+    var projectElem = $('title');
+    var descriptionElem = $('.ms-Dialog-topButton');
 
     var link = createTimerLink({
         appName: 'Planner',
