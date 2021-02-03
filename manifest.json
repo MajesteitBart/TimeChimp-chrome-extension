@@ -75,6 +75,11 @@
       "matches": ["*://*.zendesk.com/*"],
       "css": ["button/button.css"],
       "js": ["button/button.js", "button/apps/zendesk.js"]
+    },
+    {
+      "matches": ["*://*.tasks.office.com/*"],
+      "css": ["button/button.css"],
+      "js": ["button/button.js", "button/apps/microsoft-planner.js"]
     }
   ],
   "browser_action": {
@@ -96,7 +101,8 @@
     "*://*.keep.google.com/*",
     "*://*.atlassian.com/*",
     "*://*.calendar.google.com/*",
-    "*://*.zendesk.com/*"
+    "*://*.zendesk.com/*",
+    "*://*.tasks.office.com/*"
   ],
   "options_ui": {
     "page": "options.html",
