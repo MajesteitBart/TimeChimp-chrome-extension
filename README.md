@@ -21,3 +21,4 @@ TimeChimp Chrome Extension
 - Google docs
 - Zendesk
 - Atlassian
+- Microsoft Planner
