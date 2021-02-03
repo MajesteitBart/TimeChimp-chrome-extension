@@ -5,8 +5,8 @@ render('.window-header:not(.timechimp)', {observe: true}, function (elem) {
     var descriptionElem = $('.js-move-card');
 
     var link = createTimerLink({
-        appName: 'Trello',
-        className: 'trello',
+        appName: 'Planner',
+        className: 'planner',
         description: function () { return titleElem.textContent; },
         projectName: projectElem.textContent,
         calculateTotal: true
